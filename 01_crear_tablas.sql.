@@ -1,39 +1,31 @@
 -- =========================================================================
 -- PROYECTO: Análisis y Gestión de Inventarios con SQL (SQLite)
--- SCRIPT 02: Consultas Analíticas e Indicadores Clave de Operaciones (KPIs)
+-- SCRIPT 01: Creación de tablas y carga de datos de prueba (Mock Data)
 -- Autor: Javier Salamanca
 -- =========================================================================
 
--- CONSULTA 1: Valorización total del inventario actual en almacén
--- Permite conocer cuánto capital monetario está inmovilizado en stock.
-SELECT 
-    COUNT(id_producto) AS total_skus,
-    SUM(stock_actual) AS unidades_totales,
-    ROUND(SUM(stock_actual * costo_unitario), 2) AS valor_total_inventario_usd
-FROM productos;
+-- Eliminar tabla si ya existe para evitar conflictos al reiniciar
+DROP TABLE IF EXISTS productos;
 
+-- 1. Creación de la tabla principal de productos e inventario
+CREATE TABLE productos (
+    id_producto INTEGER PRIMARY KEY AUTOINCREMENT,
+    codigo_sku TEXT NOT NULL,
+    nombre_producto TEXT NOT NULL,
+    categoria TEXT NOT NULL,
+    stock_actual INTEGER NOT NULL,
+    stock_minimo_rop INTEGER NOT NULL, -- Punto de Reorden (Reorder Point)
+    costo_unitario REAL NOT NULL,
+    demanda_anual_estimada INTEGER NOT NULL
+);
 
--- CONSULTA 2: Alertas de Stock Crítico (Productos bajo el Punto de Reorden / ROP)
--- Identifica qué materiales necesitan orden de compra urgente para evitar paradas de planta.
-SELECT 
-    codigo_sku,
-    nombre_producto,
-    categoria,
-    stock_actual,
-    stock_minimo_rop AS rop_requerido,
-    (stock_minimo_rop - stock_actual) AS deficit_reposicion
-FROM productos
-WHERE stock_actual < stock_minimo_rop
-ORDER BY deficit_reposicion DESC;
-
-
--- CONSULTA 3: Valoración de la demanda anual y costo potencial de inventario
--- Ayuda a dimensionar el flujo financiero anual por categoría de insumo.
-SELECT 
-    categoria,
-    COUNT(id_producto) AS cantidad_items,
-    SUM(demanda_anual_estimada) AS demanda_anual_total_unidades,
-    ROUND(SUM(demanda_anual_estimada * costo_unitario), 2) AS costo_anual_estimado_usd
-FROM productos
-GROUP BY categoria
-ORDER BY costo_anual_estimado_usd DESC;
+-- 2. Inserción de datos de prueba (Mock Data inspirados en entornos industriales)
+INSERT INTO productos (codigo_sku, nombre_producto, categoria, stock_actual, stock_minimo_rop, costo_unitario, demanda_anual_estimada) VALUES
+('SKU-001', 'Rodamiento de bolas 6204', 'Repuestos', 12, 15, 8.50, 450),
+('SKU-002', 'Faja de transmisión en V B-46', 'Repuestos', 5, 8, 22.00, 180),
+('SKU-003', 'Aceite lubricante industrial ISO VG 68 (Lata 19L)', 'Lubricantes', 25, 10, 65.00, 300),
+('SKU-004', 'Electrodos E6013 1/8" (Caja 20kg)', 'Soldadura', 4, 12, 45.00, 240),
+('SKU-005', 'Guantes de carnaza para soldador (Par)', 'Seguridad EPP', 85, 30, 3.20, 1200),
+('SKU-006', 'Disco de corte de metal 7"', 'Herramientas', 18, 25, 2.50, 950),
+('SKU-007', 'Válvula de compuerta de bronce 2"', 'Tuberías y Conexiones', 3, 5, 85.00, 60),
+('SKU-008', 'Cinta de teflón industrial (Pack 10)', 'Tuberías y Conexiones', 45, 20, 1.80, 500);
