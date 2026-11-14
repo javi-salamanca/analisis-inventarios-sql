@@ -1,0 +1,9 @@
+id_producto;codigo_sku;nombre_producto;categoria;stock_actual;stock_minimo_rop;costo_unitario;demanda_anual_estimada
+1;SKU-001;Rodamiento de bolas 6204;Repuestos;12;15;8.5;450
+2;SKU-002;Faja de transmisión en V B-46;Repuestos;5;8;22.0;180
+3;SKU-003;Aceite lubricante industrial ISO VG 68 (Lata 19L);Lubricantes;25;10;65.0;300
+4;SKU-004;"Electrodos E6013 1/8"" (Caja 20kg)";Soldadura;4;12;45.0;240
+5;SKU-005;Guantes de carnaza para soldador (Par);Seguridad EPP;85;30;3.2;1200
+6;SKU-006;"Disco de corte de metal 7""";Herramientas;18;25;2.5;950
+7;SKU-007;"Válvula de compuerta de bronce 2""";Tuberías y Conexiones;3;5;85.0;60
+8;SKU-008;Cinta de teflón industrial (Pack 10);Tuberías y Conexiones;45;20;1.8;500
